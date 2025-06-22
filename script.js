@@ -61,26 +61,82 @@ const SyncStorage = {
   },
 
   loadData() {
-    try {
-      const data = this.loadFromLocal();
+  try {
+    const data = this.loadFromLocal();
+    
+    if (data && data.inventarios) {
+      window.inventarios = data.inventarios;
+      console.log(`📋 ${data.inventarios.length} inventários carregados`);
       
-      if (data && data.inventarios) {
-        window.inventarios = data.inventarios;
-        console.log(`📋 ${data.inventarios.length} inventários carregados`);
+      // Forçar atualização da tela de inventários após carregar dados
+      setTimeout(() => {
+        // Verifica se estamos na tela de inventários
+        const inventoryScreen = document.getElementById('inventoryScreen');
+        const inventoryList = document.getElementById('inventoryList');
         
-        if (typeof window.carregarInventarios === 'function') {
-          setTimeout(() => window.carregarInventarios(), 100);
+        if (inventoryScreen && inventoryScreen.classList.contains('active') && inventoryList) {
+          // Chama função de carregamento manualmente
+          this.renderInventoryList();
         }
-      }
-      
-      return data;
-      
-    } catch (error) {
-      console.error('❌ Erro ao carregar dados:', error);
-      return null;
+      }, 100);
     }
-  },
-
+    
+    return data;
+    
+  } catch (error) {
+    console.error('❌ Erro ao carregar dados:', error);
+    return null;
+  }
+},
+renderInventoryList() {
+  const container = document.getElementById('inventoryList');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  if (!window.inventarios || window.inventarios.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 40px; color: #666;">
+        <h3>Nenhum inventário encontrado</h3>
+        <p>Inicie sua primeira coleta de dados!</p>
+      </div>
+    `;
+    return;
+  }
+  
+  window.inventarios.forEach(function(inventario, index) {
+    const card = document.createElement('div');
+    card.className = 'inventory-card';
+    
+    const totalIndividuos = inventario.dados ? inventario.dados.length : 0;
+    const dataUltimaColeta = inventario.ultimaColeta || inventario.dataInicio;
+    const status = totalIndividuos === 0 ? 'Novo' : 'Em andamento';
+    const areaInfo = inventario.areaParcela ? `📐 ${inventario.areaParcela}m²` : '';
+    
+    card.innerHTML = `
+      <div class="inventory-card-title">${inventario.nome}</div>
+      <div class="inventory-card-info">📍 ${inventario.local}</div>
+      ${areaInfo ? `<div class="inventory-card-info">${areaInfo}</div>` : ''}
+      <div class="inventory-card-info">📅 Criado: ${inventario.dataInicio}</div>
+      <div class="inventory-card-info">🕒 Última coleta: ${dataUltimaColeta}</div>
+      <div class="inventory-card-info">📊 Status: ${status}</div>
+      <div class="inventory-card-stats">
+        <div class="inventory-stat">
+          <div class="inventory-stat-number">${totalIndividuos}</div>
+          <div class="inventory-stat-label">Indivíduos</div>
+        </div>
+        <div class="inventory-stat">
+          <div class="inventory-stat-number">${inventario.colunas ? inventario.colunas.length : 0}</div>
+          <div class="inventory-stat-label">Colunas</div>
+        </div>
+      </div>
+    `;
+    
+    container.appendChild(card);
+  });
+  
+  console.log('✅ Interface atualizada com', window.inventarios.length, 'inventários');
+},
   loadFromLocal() {
     try {
       const stored = localStorage.getItem(this.config.localStorageKey);

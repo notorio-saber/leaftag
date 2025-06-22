@@ -1,6 +1,10 @@
+import SyncStorage from './modules/sync-storage.js';
+
 // Variáveis globais
 let inventarios = [];
 let currentInventory = null;
+// ... resto das variáveis
+// Variáveis globais
 let currentIndividualIndex = 1;
 let inventoryColumns = [];
 let inventoryData = [];
@@ -26,8 +30,11 @@ const templates = {
 };
 
 // Inicialização
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
   console.log('LeafTag Inventário iniciado com sucesso!');
+  
+  // Inicializar sync storage (só localStorage por enquanto)
+  await SyncStorage.init();
   
   // Event listener para mudança no tipo de export
   document.addEventListener('change', function(e) {
@@ -696,6 +703,9 @@ function autoSave() {
     } else {
       inventarios.push(currentInventory);
     }
+    
+    // ADICIONAR ESTA LINHA AQUI (antes do console.log):
+    SyncStorage.manualSave();
     
     console.log('Dados salvos automaticamente');
   }

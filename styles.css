@@ -1,0 +1,746 @@
+/* Reset e estilos base */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f3f3f3;
+  color: #333;
+}
+
+/* Controle de telas */
+.screen {
+  display: none;
+  padding: 20px;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* Títulos */
+h1, h2 {
+  text-align: center;
+  color: #2c5e3f;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin-bottom: 25px;
+}
+
+/* Logo principal */
+.main-logo {
+  font-size: 60px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.main-subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+  font-style: italic;
+}
+
+/* Elementos de formulário */
+input, textarea, button, select {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Botões */
+button {
+  background-color: #2c5e3f;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #3a7a55;
+}
+
+.menu-btn {
+  background-color: #2c5e3f;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: background-color 0.2s;
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.menu-btn:hover {
+  background-color: #3a7a55;
+}
+
+.btn-back {
+  background-color: #ccc !important;
+  color: #333 !important;
+}
+
+.btn-secondary {
+  background-color: #6c757d !important;
+  color: white !important;
+}
+
+.btn-continue {
+  background-color: #28a745 !important;
+  color: white !important;
+}
+
+.btn-download {
+  background-color: #17a2b8 !important;
+  color: white !important;
+}
+
+.btn-danger {
+  background-color: #dc3545 !important;
+  color: white !important;
+}
+
+.btn-calc {
+  background-color: #ffc107 !important;
+  color: #333 !important;
+  width: auto !important;
+  padding: 8px 16px !important;
+  margin: 0 !important;
+  font-size: 14px !important;
+}
+
+.btn-gps {
+  background-color: #007bff !important;
+  color: white !important;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 10px 0;
+  transition: all 0.3s ease;
+}
+
+.btn-gps:hover {
+  background-color: #0056b3 !important;
+}
+
+.btn-gps:disabled {
+  background-color: #6c757d !important;
+  cursor: not-allowed;
+}
+
+/* Coordenadas GPS */
+.coordinates-display {
+  background: #e8f5e8;
+  border: 2px solid #28a745;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.coordinates-display.error {
+  background: #f8d7da;
+  border-color: #dc3545;
+  color: #721c24;
+}
+
+.coordinates-text {
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.coordinates-accuracy {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+}
+
+/* Cards de inventário */
+.inventory-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.inventory-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.inventory-card-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c5e3f;
+  margin-bottom: 8px;
+}
+
+.inventory-card-info {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.inventory-card-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.inventory-stat {
+  text-align: center;
+}
+
+.inventory-stat-number {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2c5e3f;
+}
+
+.inventory-stat-label {
+  font-size: 12px;
+  color: #777;
+}
+
+/* Templates */
+.template-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.template-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.template-card h3 {
+  margin-top: 0;
+  color: #2c5e3f;
+}
+
+.template-card p {
+  color: #666;
+  margin: 10px 0;
+}
+
+.template-card small {
+  color: #999;
+  font-size: 12px;
+}
+
+/* Opções de checkbox */
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  margin: 8px 0;
+  background-color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: background-color 0.2s;
+}
+
+.checkbox-option input[type="checkbox"] {
+  width: auto !important;
+  margin-right: 12px !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.checkbox-option:hover {
+  background-color: #f8f9fa;
+}
+
+/* Colunas customizadas */
+.custom-column-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.custom-column-input {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.custom-column-input input {
+  flex: 1;
+  margin: 0 !important;
+}
+
+.custom-column-input button {
+  width: auto !important;
+  padding: 8px 12px !important;
+  margin: 0 !important;
+  background-color: #dc3545 !important;
+  font-size: 14px !important;
+}
+
+/* Cards de coleta de dados */
+.data-collection-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.data-collection-card h3 {
+  margin-top: 0;
+  color: #2c5e3f;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.data-collection-card input,
+.data-collection-card textarea {
+  margin: 0 !important;
+  border: 2px solid #e9ecef !important;
+  font-size: 18px !important;
+  padding: 15px !important;
+  transition: border-color 0.2s;
+}
+
+.data-collection-card input:focus,
+.data-collection-card textarea:focus {
+  border-color: #2c5e3f !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(44, 94, 63, 0.1);
+}
+
+/* Header do inventário */
+.inventory-header {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.inventory-counter {
+  margin-top: 15px;
+}
+
+.inventory-counter span {
+  background-color: #2c5e3f;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Ações do inventário */
+.inventory-actions {
+  position: sticky;
+  bottom: 0;
+  background-color: #f3f3f3;
+  padding: 15px 0;
+  margin: 20px -20px -20px -20px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Seção de área da parcela */
+.plot-area-section {
+  margin: 20px 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%);
+  border-radius: 12px;
+  border-left: 4px solid #2c5e3f;
+}
+
+.plot-area-section h3 {
+  margin-top: 0;
+  color: #2c5e3f;
+  font-size: 18px;
+}
+
+.plot-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.plot-calculator {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.plot-calculator p {
+  margin: 0 0 10px 0;
+  font-weight: 600;
+  color: #2c5e3f;
+}
+
+.calc-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.calc-inputs input {
+  flex: 1;
+  min-width: 100px;
+  margin: 0 !important;
+}
+
+.calc-inputs span {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c5e3f;
+}
+
+.template-section {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+/* Múltiplos fustes */
+.multiple-stems-section {
+  margin: 20px 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+  border-radius: 12px;
+  border-left: 4px solid #f39c12;
+}
+
+.multiple-stems-toggle {
+  background: white !important;
+  padding: 15px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  margin-bottom: 15px !important;
+}
+
+.package-info strong {
+  color: #2c5e3f;
+  font-size: 16px;
+}
+
+.package-info small {
+  color: #666;
+  font-size: 12px;
+}
+
+#stemsContainer {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#stemsContainer h3 {
+  margin-top: 0;
+  color: #f39c12;
+  font-size: 18px;
+}
+
+#editStemsContainer {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#editStemsContainer h3 {
+  margin-top: 0;
+  color: #f39c12;
+  font-size: 18px;
+}
+
+.stem-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-left: 3px solid #f39c12;
+  position: relative;
+}
+
+.stem-card h4 {
+  margin-top: 0;
+  color: #2c5e3f;
+  font-size: 16px;
+}
+
+.stem-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.stem-inputs input {
+  margin: 0 !important;
+  padding: 10px !important;
+  border: 2px solid #e9ecef !important;
+  border-radius: 5px !important;
+  font-size: 16px !important;
+}
+
+.remove-stem-btn {
+  background: #dc3545 !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 12px !important;
+  border-radius: 5px !important;
+  cursor: pointer;
+  font-size: 14px !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+
+.remove-stem-btn:hover {
+  background: #c82333 !important;
+}
+
+/* Botões de ação da tabela */
+.table-action-btn {
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  margin: 0 2px;
+  transition: background-color 0.2s;
+  width: auto !important;
+  display: inline-block;
+}
+
+.table-action-btn.edit {
+  background: #007bff !important;
+  color: white !important;
+}
+
+.table-action-btn.delete {
+  background: #dc3545 !important;
+  color: white !important;
+}
+
+.table-action-btn:hover.edit {
+  background: #0056b3 !important;
+}
+
+.table-action-btn:hover.delete {
+  background: #c82333 !important;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 350px;
+  text-align: center;
+}
+
+/* Modal de export */
+.export-modal {
+  max-width: 500px !important;
+  text-align: left !important;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.export-modal h3 {
+  text-align: center !important;
+  color: #2c5e3f !important;
+  margin-bottom: 20px !important;
+}
+
+.export-options h4 {
+  color: #2c5e3f;
+  margin: 20px 0 10px 0;
+  font-size: 16px;
+}
+
+.package-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.package-option {
+  display: flex;
+  align-items: flex-start;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.package-option:hover {
+  background: #e9ecef;
+  border-color: #2c5e3f;
+}
+
+.package-option input[type="radio"] {
+  width: auto !important;
+  margin: 0 10px 0 0 !important;
+}
+
+.custom-calculations {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.calc-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.calc-option {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.calc-option input[type="checkbox"] {
+  width: auto !important;
+  margin: 0 10px 0 0 !important;
+}
+
+.export-settings {
+  background: #e8f5e8;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.setting-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.setting-input label {
+  flex: 1;
+  font-size: 14px;
+  color: #2c5e3f;
+  font-weight: 600;
+}
+
+.setting-input input {
+  width: 80px !important;
+  margin: 0 !important;
+  padding: 8px !important;
+  text-align: center;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  flex: 1;
+  margin: 0 !important;
+}
+
+/* Spinner de carregamento */
+.spinner {
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #007bff;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsividade mobile */
+@media (max-width: 768px) {
+  .screen {
+    padding-bottom: 120px;
+  }
+  
+  .inventory-actions {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 !important;
+    padding: 15px 20px !important;
+    background: white !important;
+    border-top: 2px solid #ddd !important;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
+  }
+}

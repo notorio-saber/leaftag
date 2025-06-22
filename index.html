@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LeafTag - Inventário Florestal</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div id="mainScreen" class="screen active">
+    <div class="main-logo">🌲</div>
+    <h1>LeafTag - Inventário Florestal</h1>
+    <p class="main-subtitle">Coleta rápida e eficiente de dados florestais</p>
+    <button class="menu-btn" onclick="goTo('inventoryScreen')">Meus Inventários</button>
+    <button class="menu-btn" onclick="novoInventario()">+ Nova Coleta</button>
+    <button class="menu-btn" onclick="goTo('templatesScreen')">Modelos Padrão</button>
+    <button class="menu-btn" onclick="goTo('statisticsScreen')">Estatísticas</button>
+  </div>
+
+  <div id="inventoryScreen" class="screen">
+    <h2>Meus Inventários</h2>
+    <div id="inventoryList"></div>
+    <button class="menu-btn" onclick="novoInventario()">+ Nova Coleta de Dados</button>
+    <button class="btn-back" onclick="goTo('mainScreen')">Voltar</button>
+  </div>
+
+  <div id="inventorySetupScreen" class="screen">
+    <h2>Configurar Inventário</h2>
+    <input type="text" id="inventoryName" placeholder="Nome do inventário" />
+    <input type="text" id="inventoryLocation" placeholder="Local do inventário" />
+    
+    <div class="plot-area-section">
+      <h3>📐 Área da Parcela:</h3>
+      <div class="plot-inputs">
+        <input type="number" id="plotArea" placeholder="Área da parcela (m²)" step="0.01" />
+        <div class="plot-calculator">
+          <p><strong>Ou calcular:</strong></p>
+          <div class="calc-inputs">
+            <input type="number" id="plotWidth" placeholder="Largura (m)" step="0.1" />
+            <span>×</span>
+            <input type="number" id="plotLength" placeholder="Comprimento (m)" step="0.1" />
+            <button type="button" onclick="calcularAreaParcela()" class="btn-calc">Calcular</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="template-section">
+      <h3>Usar modelo padrão:</h3>
+      <select id="templateSelect" onchange="aplicarTemplate()">
+        <option value="">Selecionar modelo...</option>
+        <option value="basico">Básico (Nome + CAP + DAP)</option>
+        <option value="completo">Completo (Todos os campos)</option>
+        <option value="rapido">Rápido (Apenas essenciais)</option>
+      </select>
+    </div>
+    
+    <h3>Selecione as colunas para coleta:</h3>
+    <div id="columnOptions">
+      <label class="checkbox-option">
+        <input type="checkbox" value="nomePopular" checked> Nome Popular
+      </label>
+      <label class="checkbox-option">
+        <input type="checkbox" value="nomeCientifico"> Nome Científico
+      </label>
+      <label class="checkbox-option">
+        <input type="checkbox" value="familia"> Família
+      </label>
+      <label class="checkbox-option">
+        <input type="checkbox" value="cap"> CAP (cm)
+      </label>
+      <label class="checkbox-option">
+        <input type="checkbox" value="dap"> DAP (cm)
+      </label>
+      <label class="checkbox-option">
+        <input type="checkbox" value="hc"> HC - Altura Comercial (m)
+      </label>
+      <label class="checkbox-option">
+        <input type="checkbox" value="ht"> HT - Altura Total (m)
+      </label>
+      <label class="checkbox-option">
+        <input type="checkbox" value="coordenadas"> 📍 Coordenadas GPS
+      </label>
+      <label class="checkbox-option">
+        <input type="checkbox" value="observacoes"> Observações
+      </label>
+    </div>
+
+    <div class="custom-column-section">
+      <h3>Colunas Personalizadas:</h3>
+      <div id="customColumns"></div>
+      <button type="button" onclick="adicionarColunaPersonalizada()" class="btn-secondary">+ Adicionar Coluna</button>
+    </div>
+
+    <button onclick="iniciarInventario()" class="menu-btn">Iniciar Coleta</button>
+    <button class="btn-back" onclick="goTo('inventoryScreen')">Cancelar</button>
+  </div>
+
+  <div id="inventoryCollectionScreen" class="screen">
+    <div class="inventory-header">
+      <h2 id="inventoryTitle"></h2>
+      <div class="inventory-counter">
+        <span id="currentIndividual">Indivíduo 1</span>
+      </div>
+    </div>
+
+    <div id="dataCollectionCards"></div>
+
+    <!-- SEÇÃO: MÚLTIPLOS FUSTES -->
+    <div class="multiple-stems-section">
+      <label class="checkbox-option multiple-stems-toggle">
+        <input type="checkbox" id="multipleStems" onchange="toggleMultipleStems()"> 
+        <span class="package-info">
+          <strong>🌳 Árvore com múltiplos fustes</strong><br>
+          <small>Adicionar CAP e altura para cada fuste separadamente</small>
+        </span>
+      </label>
+      
+      <div id="stemsContainer" style="display: none;">
+        <h3>📏 Fustes da Árvore:</h3>
+        <div id="stemsList"></div>
+        <button type="button" onclick="adicionarFuste()" class="btn-secondary">+ Adicionar Fuste</button>
+      </div>
+    </div>
+
+    <div class="inventory-actions">
+      <button onclick="salvarIndividuo()" class="menu-btn">Próximo Indivíduo</button>
+      <button onclick="salvarEContinuar()" class="btn-continue">Salvar e Continuar</button>
+      <button onclick="finalizarInventario()" class="btn-secondary">Finalizar Inventário</button>
+      <button class="btn-back" onclick="voltarParaInventario()">Cancelar</button>
+    </div>
+  </div>
+
+  <div id="inventoryDetailScreen" class="screen">
+    <div class="inventory-detail-header">
+      <h2 id="inventoryDetailTitle"></h2>
+      <div id="inventoryDetailInfo"></div>
+    </div>
+
+    <div class="inventory-table-container">
+      <div id="inventoryTable"></div>
+    </div>
+
+    <div class="inventory-detail-actions">
+      <button onclick="continuarInventario()" class="menu-btn">Continuar Coleta</button>
+      <button onclick="duplicarInventario()" class="btn-secondary">Duplicar Configuração</button>
+      <button onclick="abrirModalExport()" class="btn-download">📥 Download Excel</button>
+      <button onclick="excluirInventario()" class="btn-danger">Excluir Inventário</button>
+      <button class="btn-back" onclick="goTo('inventoryScreen')">Voltar</button>
+    </div>
+  </div>
+
+  <div id="editIndividualScreen" class="screen">
+    <div class="inventory-header">
+      <h2 id="editIndividualTitle">Editar Indivíduo</h2>
+      <div class="inventory-counter">
+        <span id="editIndividualNumber"></span>
+      </div>
+    </div>
+
+    <div id="editDataCollectionCards"></div>
+
+    <!-- SEÇÃO: MÚLTIPLOS FUSTES NA EDIÇÃO -->
+    <div class="multiple-stems-section">
+      <label class="checkbox-option multiple-stems-toggle">
+        <input type="checkbox" id="editMultipleStems" onchange="toggleEditMultipleStems()"> 
+        <span class="package-info">
+          <strong>🌳 Árvore com múltiplos fustes</strong><br>
+          <small>Editar CAP e altura para cada fuste separadamente</small>
+        </span>
+      </label>
+      
+      <div id="editStemsContainer" style="display: none;">
+        <h3>📏 Fustes da Árvore:</h3>
+        <div id="editStemsList"></div>
+        <button type="button" onclick="adicionarFusteEdit()" class="btn-secondary">+ Adicionar Fuste</button>
+      </div>
+    </div>
+
+    <div class="inventory-actions">
+      <button onclick="salvarEdicaoIndividuo()" class="menu-btn">Salvar Alterações</button>
+      <button class="btn-back" onclick="cancelarEdicaoIndividuo()">Cancelar</button>
+    </div>
+  </div>
+
+  <div id="templatesScreen" class="screen">
+    <h2>Modelos Padrão</h2>
+    <div id="templatesList">
+      <div class="template-card" onclick="carregarTemplate('basico')">
+        <h3>Básico</h3>
+        <p>Nome Popular, CAP, DAP</p>
+        <small>3 campos • Coleta rápida</small>
+      </div>
+      <div class="template-card" onclick="carregarTemplate('completo')">
+        <h3>Completo</h3>
+        <p>Todos os campos disponíveis</p>
+        <small>9 campos • Análise detalhada</small>
+      </div>
+      <div class="template-card" onclick="carregarTemplate('rapido')">
+        <h3>Rápido</h3>
+        <p>Apenas dados essenciais</p>
+        <small>4 campos • Campo otimizado</small>
+      </div>
+    </div>
+    <button class="btn-back" onclick="goTo('mainScreen')">Voltar</button>
+  </div>
+
+  <div id="statisticsScreen" class="screen">
+    <h2>Estatísticas</h2>
+    <div id="statsContainer">
+      <div style="text-align: center; padding: 40px;">
+        <h3>📊 Estatísticas Gerais</h3>
+        <p>Funcionalidade em desenvolvimento...</p>
+      </div>
+    </div>
+    <button class="btn-back" onclick="goTo('mainScreen')">Voltar</button>
+  </div>
+
+  <!-- MODAL: SELEÇÃO DE CÁLCULOS -->
+  <div id="exportModal" class="modal-overlay">
+    <div class="modal-box export-modal">
+      <h3>📊 Selecionar Cálculos para Export</h3>
+      
+      <div class="export-options">
+        <h4>🔥 Pacotes de Cálculos:</h4>
+        <div class="package-options">
+          <label class="package-option">
+            <input type="radio" name="exportPackage" value="dados" checked> 
+            <span class="package-info">
+              <strong>Apenas Dados Brutos</strong><br>
+              <small>Tabela original sem cálculos</small>
+            </span>
+          </label>
+          
+          <label class="package-option">
+            <input type="radio" name="exportPackage" value="basico"> 
+            <span class="package-info">
+              <strong>🌲 Básico</strong><br>
+              <small>DAP, Área Basal, Volume, Densidade</small>
+            </span>
+          </label>
+          
+          <label class="package-option">
+            <input type="radio" name="exportPackage" value="completo"> 
+            <span class="package-info">
+              <strong>📊 Completo</strong><br>
+              <small>Todos os cálculos disponíveis</small>
+            </span>
+          </label>
+          
+          <label class="package-option">
+            <input type="radio" name="exportPackage" value="customizado"> 
+            <span class="package-info">
+              <strong>🎯 Customizado</strong><br>
+              <small>Escolher individualmente</small>
+            </span>
+          </label>
+        </div>
+
+        <div id="customCalculations" class="custom-calculations" style="display: none;">
+          <h4>📐 Cálculos Individuais:</h4>
+          <div class="calc-options">
+            <label class="calc-option">
+              <input type="checkbox" value="dap_calculado"> DAP Calculado (quando só tem CAP)
+            </label>
+            <label class="calc-option">
+              <input type="checkbox" value="area_seccional"> Área Seccional Individual (g)
+            </label>
+            <label class="calc-option">
+              <input type="checkbox" value="volume_individual"> Volume Individual
+            </label>
+            <label class="calc-option">
+              <input type="checkbox" value="area_basal_ha"> Área Basal por Hectare
+            </label>
+            <label class="calc-option">
+              <input type="checkbox" value="volume_ha"> Volume por Hectare
+            </label>
+            <label class="calc-option">
+              <input type="checkbox" value="densidade_ha"> Densidade por Hectare
+            </label>
+            <label class="calc-option">
+              <input type="checkbox" value="dap_medio"> DAP Médio Quadrático
+            </label>
+          </div>
+        </div>
+
+        <div class="export-settings">
+          <h4>⚙️ Configurações:</h4>
+          <div class="setting-input">
+            <label>Fator de Forma para Volume:</label>
+            <input type="number" id="fatorForma" value="0.5" step="0.01" min="0.1" max="1.0" />
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button onclick="executarExport()" class="btn-download">📥 Exportar</button>
+        <button onclick="fecharModalExport()" class="btn-back">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>

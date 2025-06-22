@@ -817,7 +817,8 @@ function autoSave() {
     }
     
     // Sync automático
-    SyncStorage.manualSave();
+    console.log('📊 Array inventarios após autoSave:', inventarios.length, 'inventários');
+SyncStorage.save(inventarios);
     
     console.log('Dados salvos automaticamente');
   }

@@ -1,10 +1,122 @@
-import SyncStorage from './modules/sync-storage.js';
+// ===== SYNC STORAGE INTEGRADO (SEM MÓDULOS ES6) =====
+const SyncStorage = {
+  config: {
+    localStorageKey: 'leaftag_inventarios',
+    debounceTime: 1000,
+    userId: null
+  },
+
+  state: {
+    saving: false,
+    saveTimeout: null
+  },
+
+  init() {
+    console.log('🌱 LeafTag SyncStorage: Inicializando...');
+    this.config.userId = this.generateUserId();
+    this.loadData();
+    console.log('✅ LeafTag SyncStorage: Módulo inicializado com sucesso');
+    return true;
+  },
+
+  generateUserId() {
+    const stored = localStorage.getItem('leaftag_user_id');
+    if (stored) return stored;
+    
+    const newId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    localStorage.setItem('leaftag_user_id', newId);
+    return newId;
+  },
+
+  save(inventarios) {
+    if (this.state.saving) {
+      this.scheduleDelayedSave(inventarios);
+      return;
+    }
+
+    try {
+      this.state.saving = true;
+      this.saveToLocal(inventarios);
+    } catch (error) {
+      console.error('❌ Erro ao salvar:', error);
+    } finally {
+      this.state.saving = false;
+    }
+  },
+
+  saveToLocal(inventarios) {
+    try {
+      const data = {
+        inventarios: inventarios || [],
+        timestamp: new Date().toISOString(),
+        version: '1.0'
+      };
+      
+      localStorage.setItem(this.config.localStorageKey, JSON.stringify(data));
+      console.log(`💾 Dados salvos localmente (${inventarios?.length || 0} inventários)`);
+      
+    } catch (error) {
+      console.error('❌ Erro localStorage:', error);
+    }
+  },
+
+  loadData() {
+    try {
+      const data = this.loadFromLocal();
+      
+      if (data && data.inventarios) {
+        window.inventarios = data.inventarios;
+        console.log(`📋 ${data.inventarios.length} inventários carregados`);
+        
+        if (typeof window.carregarInventarios === 'function') {
+          setTimeout(() => window.carregarInventarios(), 100);
+        }
+      }
+      
+      return data;
+      
+    } catch (error) {
+      console.error('❌ Erro ao carregar dados:', error);
+      return null;
+    }
+  },
+
+  loadFromLocal() {
+    try {
+      const stored = localStorage.getItem(this.config.localStorageKey);
+      if (!stored) return null;
+      
+      const data = JSON.parse(stored);
+      console.log('💾 Dados carregados do localStorage');
+      return data;
+      
+    } catch (error) {
+      console.error('❌ Erro ao carregar localStorage:', error);
+      localStorage.removeItem(this.config.localStorageKey);
+      return null;
+    }
+  },
+
+  scheduleDelayedSave(inventarios) {
+    if (this.state.saveTimeout) {
+      clearTimeout(this.state.saveTimeout);
+    }
+    
+    this.state.saveTimeout = setTimeout(() => {
+      this.save(inventarios);
+    }, this.config.debounceTime);
+  },
+
+  manualSave() {
+    return this.save(window.inventarios);
+  }
+};
+
+// ===== CÓDIGO ORIGINAL DO LEAFTAG =====
 
 // Variáveis globais
 let inventarios = [];
 let currentInventory = null;
-// ... resto das variáveis
-// Variáveis globais
 let currentIndividualIndex = 1;
 let inventoryColumns = [];
 let inventoryData = [];
@@ -30,11 +142,11 @@ const templates = {
 };
 
 // Inicialização
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', function() {
   console.log('LeafTag Inventário iniciado com sucesso!');
   
-  // Inicializar sync storage (só localStorage por enquanto)
-  await SyncStorage.init();
+  // Inicializar sync storage
+  SyncStorage.init();
   
   // Event listener para mudança no tipo de export
   document.addEventListener('change', function(e) {
@@ -704,7 +816,7 @@ function autoSave() {
       inventarios.push(currentInventory);
     }
     
-    // ADICIONAR ESTA LINHA AQUI (antes do console.log):
+    // Sync automático
     SyncStorage.manualSave();
     
     console.log('Dados salvos automaticamente');

@@ -255,7 +255,47 @@ function goTo(screenId) {
     }
   }
 }
-
+// ✅ NOVA FUNÇÃO SEPARADA - ADICIONE AQUI:
+function abrirInventario(index) {
+  console.log('🔍 abrirInventario chamada com index:', index);
+  
+  if (!window.inventarios || index < 0 || index >= window.inventarios.length) {
+    console.error('❌ Índice inválido ou array inventarios não encontrado');
+    alert('Erro ao abrir inventário.');
+    return;
+  }
+  
+  currentInventory = window.inventarios[index];
+  console.log('✅ Inventário selecionado:', currentInventory.nome);
+  
+  // Atualizar título da tela de detalhes
+  const titleElement = document.getElementById('inventoryDetailTitle');
+  if (titleElement) {
+    titleElement.textContent = currentInventory.nome;
+  }
+  
+  // Atualizar informações do inventário
+  const infoElement = document.getElementById('inventoryDetailInfo');
+  if (infoElement) {
+    const areaInfo = currentInventory.areaParcela ? 
+      `<p><strong>Área da Parcela:</strong> ${currentInventory.areaParcela} m²</p>` : '';
+    
+    infoElement.innerHTML = `
+      <p><strong>Local:</strong> ${currentInventory.local}</p>
+      ${areaInfo}
+      <p><strong>Data de Início:</strong> ${currentInventory.dataInicio}</p>
+      <p><strong>Última Coleta:</strong> ${currentInventory.ultimaColeta}</p>
+      <p><strong>Total de Indivíduos:</strong> ${currentInventory.dados ? currentInventory.dados.length : 0}</p>
+      <p><strong>Status:</strong> ${currentInventory.status || 'Em andamento'}</p>
+    `;
+  }
+  
+  // Criar tabela com os dados
+  criarTabelaInventario(currentInventory);
+  
+  // Ir para a tela de detalhes
+  goTo('inventoryDetailScreen');
+}
 function calcularAreaParcela() {
   const largura = parseFloat(document.getElementById('plotWidth').value);
   const comprimento = parseFloat(document.getElementById('plotLength').value);

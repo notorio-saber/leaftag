@@ -3,16 +3,16 @@
 
 const CACHE_NAME = 'leaftag-v1.0';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/script.js',
-  '/manifest.json',
-  // Adicione outros arquivos que criar
-  '/exports/kml-exporter.js',
-  '/assets/images/logo.png',
-  '/assets/images/icon-192.png',
-  '/assets/images/icon-512.png'
+  './',
+  './index.html',
+  './styles.css',
+  './script.js',
+  './manifest.json'
+  // Remover arquivos que ainda não existem
+  // './exports/kml-exporter.js',
+  // './assets/images/logo.png',
+  // './assets/images/icon-192.png',
+  // './assets/images/icon-512.png'
 ];
 
 // ===== INSTALAÇÃO =====

@@ -68,7 +68,10 @@ const SyncStorage = {
     if (data && data.inventarios) {
       window.inventarios = data.inventarios;
       console.log(`📋 ${data.inventarios.length} inventários carregados`);
-      this.renderInventoryList();
+      if (inventoryScreen && inventoryScreen.classList.contains('active') && inventoryList) {
+    // Chama função de carregamento manualmente
+    SyncStorage.renderInventoryList();
+}
       // Forçar atualização da tela de inventários após carregar dados
       setTimeout(() => {
         // Verifica se estamos na tela de inventários

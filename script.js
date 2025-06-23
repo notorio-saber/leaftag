@@ -1765,3 +1765,42 @@ document.addEventListener('keydown', function(e) {
 });
 
 console.log('LeafTag carregado com sucesso!');
+
+// ===== REGISTRO DO SERVICE WORKER =====
+// Adicionar no final do script.js
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('✅ Service Worker registrado:', registration.scope);
+        
+        // Verifica atualizações
+        registration.addEventListener('updatefound', () => {
+          console.log('🔄 Nova versão disponível');
+          const newWorker = registration.installing;
+          
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              // Nova versão instalada, recarregar para ativar
+              if (confirm('🔄 Nova versão disponível! Recarregar app?')) {
+                newWorker.postMessage({ type: 'SKIP_WAITING' });
+                window.location.reload();
+              }
+            }
+          });
+        });
+      })
+      .catch(error => {
+        console.error('❌ Erro ao registrar Service Worker:', error);
+      });
+  });
+  
+  // Escuta mudanças do Service Worker
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    console.log('🔄 Service Worker atualizado, recarregando...');
+    window.location.reload();
+  });
+} else {
+  console.log('❌ Service Worker não suportado');
+}

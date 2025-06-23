@@ -15,9 +15,10 @@ const SyncStorage = {
     console.log('🌱 LeafTag SyncStorage: Inicializando...');
     this.config.userId = this.generateUserId();
     this.loadData();
+    this.renderInventoryList(); // ← ADICIONE ESTA LINHA
     console.log('✅ LeafTag SyncStorage: Módulo inicializado com sucesso');
     return true;
-  },
+},
 
   generateUserId() {
     const stored = localStorage.getItem('leaftag_user_id');
@@ -67,7 +68,7 @@ const SyncStorage = {
     if (data && data.inventarios) {
       window.inventarios = data.inventarios;
       console.log(`📋 ${data.inventarios.length} inventários carregados`);
-      
+      this.renderInventoryList();
       // Forçar atualização da tela de inventários após carregar dados
       setTimeout(() => {
         // Verifica se estamos na tela de inventários

@@ -242,7 +242,7 @@ function goTo(screenId) {
     targetScreen.classList.add('active');
     
     if (screenId === 'inventoryScreen') {
-      carregarInventarios();
+      SyncStorage.renderInventoryList(); // ← MUDANÇA AQUI
     }
   }
 }

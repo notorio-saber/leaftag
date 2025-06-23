@@ -4,14 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LeafTag - Inventário Florestal</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#2c5e3f">
-  <link rel="manifest" href="manifest.json">
+  
+  <!-- PWA Icons -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png">
+  <meta name="theme-color" content="#2d5a27">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="LeafTag">
+  
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
   <div id="mainScreen" class="screen active">
-    <div class="main-logo">🌲</div>
+    <div class="logo-container">
+    <img src="/icon-192x192.png" alt="LeafTag Logo" class="main-logo">
+</div>
     <h1>LeafTag - Inventário Florestal</h1>
     <p class="main-subtitle">Coleta rápida e eficiente de dados florestais</p>
     <button class="menu-btn" onclick="goTo('inventoryScreen')">Meus Inventários</button>

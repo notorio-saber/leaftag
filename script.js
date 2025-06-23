@@ -165,7 +165,42 @@ renderInventoryList() {
 
   manualSave() {
     return this.save(window.inventarios);
+  },
+  renderInventoryList() {
+  const container = document.getElementById('inventoryList');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  if (!window.inventarios || window.inventarios.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 40px; color: #666;">
+        <h3>Nenhum inventário encontrado</h3>
+        <p>Inicie sua primeira coleta de dados!</p>
+      </div>
+    `;
+    return;
   }
+  
+  window.inventarios.forEach(function(inventario, index) {
+    const card = document.createElement('div');
+    card.className = 'inventory-card';
+    
+    const totalIndividuos = inventario.dados ? inventario.dados.length : 0;
+    const status = totalIndividuos === 0 ? 'Novo' : 'Em andamento';
+    
+    card.innerHTML = `
+      <div class="inventory-card-title">${inventario.nome}</div>
+      <div class="inventory-card-info">📍 ${inventario.local}</div>
+      <div class="inventory-card-info">📐 ${inventario.areaParcela}m²</div>
+      <div class="inventory-card-info">📊 Status: ${status}</div>
+    `;
+    
+    container.appendChild(card);
+  });
+  
+  console.log('✅ Lista atualizada com', window.inventarios.length, 'inventários');
+}
 };
 
 // ===== CÓDIGO ORIGINAL DO LEAFTAG =====

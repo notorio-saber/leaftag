@@ -757,3 +757,19 @@ button:hover {
     padding: 8px;
     object-fit: contain;
 }
+/* Botão XML */
+.xml-btn {
+    background: linear-gradient(135deg, #ff6b35, #f7931e) !important;
+    color: white !important;
+    margin-left: 10px;
+}
+
+.xml-btn:hover {
+    background: linear-gradient(135deg, #e55a2b, #e8841a) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.xml-btn:active {
+    transform: translateY(0);
+}

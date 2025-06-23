@@ -1804,3 +1804,78 @@ if ('serviceWorker' in navigator) {
 } else {
   console.log('❌ Service Worker não suportado');
 }
+// Função para exportar XML
+function exportToXML() {
+    const inventarios = JSON.parse(localStorage.getItem('inventarios')) || [];
+    
+    if (inventarios.length === 0) {
+        alert('Nenhum inventário encontrado para exportar!');
+        return;
+    }
+    
+    // Gerar conteúdo XML
+    const xmlContent = generateXMLContent(inventarios);
+    
+    // Fazer download
+    downloadXMLFile(xmlContent, 'inventarios_florestais.xml');
+}
+
+// Função para gerar o conteúdo XML
+function generateXMLContent(inventarios) {
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    xml += '<inventarios_florestais>\n';
+    xml += '  <metadados>\n';
+    xml += '    <data_exportacao>' + new Date().toISOString().split('T')[0] + '</data_exportacao>\n';
+    xml += '    <total_inventarios>' + inventarios.length + '</total_inventarios>\n';
+    xml += '  </metadados>\n';
+    
+    inventarios.forEach((inventario, index) => {
+        xml += '  <inventario id="' + (index + 1) + '">\n';
+        xml += '    <nome>' + escapeXML(inventario.nome) + '</nome>\n';
+        xml += '    <data_criacao>' + inventario.dataCriacao + '</data_criacao>\n';
+        xml += '    <coordenadas_centro lat="' + inventario.coordenadas.lat + '" lon="' + inventario.coordenadas.lng + '"/>\n';
+        
+        if (inventario.arvores && inventario.arvores.length > 0) {
+            xml += '    <arvores>\n';
+            inventario.arvores.forEach((arvore, arvoreIndex) => {
+                xml += '      <arvore id="' + (arvoreIndex + 1) + '">\n';
+                xml += '        <gps lat="' + arvore.coordenadas.lat + '" lon="' + arvore.coordenadas.lng + '"/>\n';
+                xml += '        <dap>' + arvore.dap + '</dap>\n';
+                xml += '        <altura>' + arvore.altura + '</altura>\n';
+                if (arvore.especie) {
+                    xml += '        <especie>' + escapeXML(arvore.especie) + '</especie>\n';
+                }
+                xml += '        <data_medicao>' + arvore.dataMedicao + '</data_medicao>\n';
+                xml += '      </arvore>\n';
+            });
+            xml += '    </arvores>\n';
+        }
+        
+        xml += '  </inventario>\n';
+    });
+    
+    xml += '</inventarios_florestais>';
+    return xml;
+}
+
+// Função para escapar caracteres especiais no XML
+function escapeXML(str) {
+    return str.replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#39;');
+}
+
+// Função para fazer download do arquivo XML
+function downloadXMLFile(content, filename) {
+    const blob = new Blob([content], { type: 'application/xml' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+}

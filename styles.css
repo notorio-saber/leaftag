@@ -753,8 +753,7 @@ button:hover {
     width: 80px;
     height: 80px;
     border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    background: white;
+    background: #f3f3f3;
     padding: 8px;
     object-fit: contain;
 }

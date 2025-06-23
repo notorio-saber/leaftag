@@ -92,71 +92,80 @@ const SyncStorage = {
   },
 
   renderInventoryList() {
-    console.log('🔍 DEBUG: Iniciando renderInventoryList');
-    console.log('🔍 DEBUG: window.inventarios =', window.inventarios);
-    console.log('🔍 DEBUG: length =', window.inventarios ? window.inventarios.length : 'undefined');
+  console.log('🔍 DEBUG: Iniciando renderInventoryList');
+  console.log('🔍 DEBUG: window.inventarios =', window.inventarios);
+  console.log('🔍 DEBUG: length =', window.inventarios ? window.inventarios.length : 'undefined');
+  
+  const container = document.getElementById('inventoryList');
+  console.log('🔍 DEBUG: container =', container);
+  
+  if (!container) {
+    console.log('❌ DEBUG: Container não encontrado');
+    return;
+  }
+  
+  container.innerHTML = '';
+  
+  if (!window.inventarios || window.inventarios.length === 0) {
+    console.log('🔍 DEBUG: Array vazio ou undefined - mostrando mensagem padrão');
+    container.innerHTML = `
+      <div style="text-align: center; padding: 40px; color: #666;">
+        <h3>Nenhum inventário encontrado</h3>
+        <p>Inicie sua primeira coleta de dados!</p>
+      </div>
+    `;
+    return;
+  }
+  
+  console.log('🔍 DEBUG: Iniciando forEach com', window.inventarios.length, 'inventários');
+  
+  window.inventarios.forEach(function(inventario, index) {
+    console.log('🔍 DEBUG: Processando inventário', index, inventario.nome);
     
-    const container = document.getElementById('inventoryList');
-    console.log('🔍 DEBUG: container =', container);
+    const card = document.createElement('div');
+    card.className = 'inventory-card';
     
-    if (!container) {
-      console.log('❌ DEBUG: Container não encontrado');
-      return;
-    }
+    const totalIndividuos = inventario.dados ? inventario.dados.length : 0;
+    const dataUltimaColeta = inventario.ultimaColeta || inventario.dataInicio;
+    const status = totalIndividuos === 0 ? 'Novo' : 'Em andamento';
+    const areaInfo = inventario.areaParcela ? `📐 ${inventario.areaParcela}m²` : '';
     
-    container.innerHTML = '';
-    
-    if (!window.inventarios || window.inventarios.length === 0) {
-      console.log('🔍 DEBUG: Array vazio ou undefined - mostrando mensagem padrão');
-      container.innerHTML = `
-        <div style="text-align: center; padding: 40px; color: #666;">
-          <h3>Nenhum inventário encontrado</h3>
-          <p>Inicie sua primeira coleta de dados!</p>
+    card.innerHTML = `
+      <div class="inventory-card-title">${inventario.nome}</div>
+      <div class="inventory-card-info">📍 ${inventario.local}</div>
+      ${areaInfo ? `<div class="inventory-card-info">${areaInfo}</div>` : ''}
+      <div class="inventory-card-info">📅 Criado: ${inventario.dataInicio}</div>
+      <div class="inventory-card-info">🕒 Última coleta: ${dataUltimaColeta}</div>
+      <div class="inventory-card-info">📊 Status: ${status}</div>
+      <div class="inventory-card-stats">
+        <div class="inventory-stat">
+          <div class="inventory-stat-number">${totalIndividuos}</div>
+          <div class="inventory-stat-label">Indivíduos</div>
         </div>
-      `;
-      return;
-    }
-    
-    console.log('🔍 DEBUG: Iniciando forEach com', window.inventarios.length, 'inventários');
-    
-    window.inventarios.forEach(function(inventario, index) {
-      console.log('🔍 DEBUG: Processando inventário', index, inventario.nome);
-      
-      const card = document.createElement('div');
-      card.className = 'inventory-card';
-      
-      const totalIndividuos = inventario.dados ? inventario.dados.length : 0;
-      const dataUltimaColeta = inventario.ultimaColeta || inventario.dataInicio;
-      const status = totalIndividuos === 0 ? 'Novo' : 'Em andamento';
-      const areaInfo = inventario.areaParcela ? `📐 ${inventario.areaParcela}m²` : '';
-      
-      card.innerHTML = `
-        <div class="inventory-card-title">${inventario.nome}</div>
-        <div class="inventory-card-info">📍 ${inventario.local}</div>
-        ${areaInfo ? `<div class="inventory-card-info">${areaInfo}</div>` : ''}
-        <div class="inventory-card-info">📅 Criado: ${inventario.dataInicio}</div>
-        <div class="inventory-card-info">🕒 Última coleta: ${dataUltimaColeta}</div>
-        <div class="inventory-card-info">📊 Status: ${status}</div>
-        <div class="inventory-card-stats">
-          <div class="inventory-stat">
-            <div class="inventory-stat-number">${totalIndividuos}</div>
-            <div class="inventory-stat-label">Indivíduos</div>
-          </div>
-          <div class="inventory-stat">
-            <div class="inventory-stat-number">${inventario.colunas ? inventario.colunas.length : 0}</div>
-            <div class="inventory-stat-label">Colunas</div>
-          </div>
+        <div class="inventory-stat">
+          <div class="inventory-stat-number">${inventario.colunas ? inventario.colunas.length : 0}</div>
+          <div class="inventory-stat-label">Colunas</div>
         </div>
-      `;
-      
-      console.log('🔍 DEBUG: Card criado para', inventario.nome);
-      container.appendChild(card);
-      console.log('🔍 DEBUG: Card adicionado ao container');
-    });
+      </div>
+    `;
     
-    console.log('✅ DEBUG: Lista atualizada com', window.inventarios.length, 'inventários');
-    console.log('🔍 DEBUG: Container final innerHTML length:', container.innerHTML.length);
-  },
+    // ✨ ADICIONAR EVENTO DE CLIQUE:
+    card.onclick = function() {
+      console.log('🔍 Card clicado! Abrindo inventário:', index, inventario.nome);
+      abrirInventario(index);
+    };
+    
+    // Adicionar cursor pointer
+    card.style.cursor = 'pointer';
+    
+    console.log('🔍 DEBUG: Card criado para', inventario.nome);
+    container.appendChild(card);
+    console.log('🔍 DEBUG: Card adicionado ao container');
+  });
+  
+  console.log('✅ DEBUG: Lista atualizada com', window.inventarios.length, 'inventários');
+  console.log('🔍 DEBUG: Container final innerHTML length:', container.innerHTML.length);
+},
 
   loadFromLocal() {
     try {
@@ -962,37 +971,6 @@ function showFeedback(message) {
     }, 300);
   }, 2000);
 }
-
-function abrirInventario(index) {
-  const inventario = inventarios[index];
-  if (!inventario) return;
-  
-  currentInventory = inventario;
-  
-  const titleElement = document.getElementById('inventoryDetailTitle');
-  if (titleElement) {
-    titleElement.textContent = inventario.nome;
-  }
-  
-  const infoElement = document.getElementById('inventoryDetailInfo');
-  if (infoElement) {
-    const areaInfo = inventario.areaParcela ? 
-      `<p><strong>Área da Parcela:</strong> ${inventario.areaParcela} m²</p>` : '';
-    
-    infoElement.innerHTML = `
-      <p><strong>Local:</strong> ${inventario.local}</p>
-      ${areaInfo}
-      <p><strong>Data de Início:</strong> ${inventario.dataInicio}</p>
-      <p><strong>Última Coleta:</strong> ${inventario.ultimaColeta}</p>
-      <p><strong>Total de Indivíduos:</strong> ${inventario.dados ? inventario.dados.length : 0}</p>
-      <p><strong>Status:</strong> ${inventario.status || 'Em andamento'}</p>
-    `;
-  }
-  
-  criarTabelaInventario(inventario);
-  goTo('inventoryDetailScreen');
-}
-
 function criarTabelaInventario(inventario) {
   const container = document.getElementById('inventoryTable');
   if (!container) return;

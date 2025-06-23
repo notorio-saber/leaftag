@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LeafTag - Inventário Florestal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#2c5e3f">
+  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
@@ -14,7 +17,7 @@
     <button class="menu-btn" onclick="goTo('inventoryScreen')">Meus Inventários</button>
     <button class="menu-btn" onclick="novoInventario()">+ Nova Coleta</button>
     <button class="menu-btn" onclick="goTo('templatesScreen')">Modelos Padrão</button>
-    <button class="menu-btn" onclick="goTo('statisticsScreen')">Estatísticas</button>
+    <!-- <button class="menu-btn" onclick="goTo('statisticsScreen')">📊 Estatísticas</button> -->
   </div>
 
   <div id="inventoryScreen" class="screen">
@@ -205,16 +208,18 @@
     <button class="btn-back" onclick="goTo('mainScreen')">Voltar</button>
   </div>
 
-  <div id="statisticsScreen" class="screen">
-    <h2>Estatísticas</h2>
-    <div id="statsContainer">
-      <div style="text-align: center; padding: 40px;">
-        <h3>📊 Estatísticas Gerais</h3>
-        <p>Funcionalidade em desenvolvimento...</p>
-      </div>
+ <!-- 
+<div id="statisticsScreen" class="screen">
+  <h2>Estatísticas</h2>
+  <div id="statsContainer">
+    <div style="text-align: center; padding: 40px;">
+      <h3>📊 Estatísticas Gerais</h3>
+      <p>Funcionalidade em desenvolvimento...</p>
     </div>
-    <button class="btn-back" onclick="goTo('mainScreen')">Voltar</button>
   </div>
+  <button class="btn-back" onclick="goTo('mainScreen')">Voltar</button>
+</div>
+-->
 
   <!-- MODAL: SELEÇÃO DE CÁLCULOS -->
   <div id="exportModal" class="modal-overlay">
